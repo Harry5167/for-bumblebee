@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Bumblebee</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <style>
+        /* --- Root Variables & Theme Configuration --- */
+        :root {
+            --bg-dark: #080315;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --pink-glow: #ff4d6d;
+            --purple-glow: #a020f0;
+            --blue-glow: #00d2ff;
+            --gold: #ffd700;
+            --white: #ffffff;
+            --text-muted: #b5b3c3;
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-accent: 'Sacramento', cursive;
+        }
+
+        /* --- Global Reset --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: var(--font-body);
+            color: var(--white);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Mouse Glow effect --- */
+        .mouse-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 77, 109, 0.15) 0%, rgba(160, 32, 240, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            mix-blend-mode: screen;
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        /* --- Loading Screen --- */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .heart-pulse {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            animation: pulse-zoom 1.2s infinite ease-in-out;
+        }
+
+        .heart-svg {
+            fill: var(--pink-glow);
+            filter: drop-shadow(0 0 15px var(--pink-glow));
+        }
+
+        .loader-text {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        @keyframes pulse-zoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* --- Glassmorphism Elements --- */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Common Layout Elements --- */
+        .section-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--white), var(--pink-glow), var(--blue-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        /* --- 2. Hero Section --- */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+        }
+
+        .teddy-wrapper {
+            margin-bottom: 30px;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
+            min-height: 80px;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .scroll-down-indicator {
+            font-size: 1.5rem;
+            color: var(--pink-glow);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* --- 3. Love Letter Section --- */
+        .letter-section {
+            position: relative;
+            background: radial-gradient(circle at 10% 20%, rgba(22, 8, 44, 0.5) 0%, rgba(8, 3, 21, 1) 90%);
+        }
+
+        .letter-card {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: 24px;
+        }
+
+        .glowing-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, var(--pink-glow), var(--purple-glow), var(--blue-glow)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            opacity: 0.4;
+        }
+
+        .letter-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--pink-glow);
+            margin-bottom: 25px;
+        }
+
+        .letter-body {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #e6e4f0;
+            min-height: 250px;
+        }
+
+        .letter-signature {
+            font-family: var(--font-accent);
+            font-size: 2.8rem;
+            color: var(--gold);
+            text-align: right;
+            margin-top: 30px;
+        }
+
+        /* --- 4. Memory Gallery --- */
+        .gallery-section {
+            background: #080315;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .gallery-card-wrapper {
+            perspective: 1000px;
+        }
+
+        .gallery-card {
+            border-radius: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.6s ease;
+            animation: cardsFloat 6s ease-in-out infinite alternate;
+        }
+
+        .gallery-card-wrapper:nth-child(2) .gallery-card {
+            animation-delay: 1.5s;
+        }
+
+        .gallery-card-wrapper:nth-child(3) .gallery-card {
+            animation-delay: 3s;
+        }
+
+        @keyframes cardsFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px) scale(1.03) rotateY(5deg) rotateX(2deg);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.2);
+            border-color: rgba(255, 77, 109, 0.3);
+        }
+
+        .image-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-card:hover .image-container img {
+            transform: scale(1.08);
+        }
+
+        /* Reflection Effect */
+        .reflection {
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-25deg);
+            transition: left 0.75s ease;
+        }
+
+        .gallery-card:hover .reflection {
+            left: 150%;
+        }
+
+        .card-caption {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        /* Lightbox Modal styling */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 3, 21, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 75vh;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 77, 109, 0.25);
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 75vh;
+            display: block;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: var(--white);
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: var(--white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--pink-glow);
+        }
+
+        /* --- 5. Timeline --- */
+        .timeline-section {
+            background: radial-gradient(circle at 90% 80%, rgba(22, 8, 44, 0.5) 0%, rgba(8, 3, 21, 1) 90%);
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--pink-glow), var(--purple-glow), transparent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            margin-bottom: 50px;
+        }
+
+        .timeline-item.left {
+            left: 0;
+            padding-right: 40px;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+            padding-left: 40px;
+        }
+
+        .timeline-glow {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--pink-glow);
+            box-shadow: 0 0 12px var(--pink-glow);
+            top: 25px;
+        }
+
+        .timeline-item.left .timeline-glow {
+            right: -7px;
+        }
+
+        .timeline-item.right .timeline-glow {
+            left: -7px;
+        }
+
+        .timeline-content {
+            padding: 30px;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--pink-glow);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .timeline-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* --- 6. Reasons Section --- */
+        .reasons-section {
+            background: #080315;
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .reason-card {
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .reason-icon {
+            font-size: 2.2rem;
+            color: var(--blue-glow);
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            margin-bottom: 25px;
+        }
+
+        .reason-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .reason-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* --- 7. Interactive Heart --- */
+        .interactive-heart-section {
+            text-align: center;
+            background: radial-gradient(circle at 10% 50%, rgba(22, 8, 44, 0.5) 0%, rgba(8, 3, 21, 1) 90%);
+        }
+
+        .heart-container {
+            margin: 40px auto;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glowing-heart {
+            font-size: 5.5rem;
+            color: var(--pink-glow);
+            filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.6));
+            animation: pulse 1.4s infinite;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glowing-heart:active {
+            transform: scale(0.85);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.6)); }
+            50% { transform: scale(1.12); filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.9)); }
+        }
+
+        .heart-message {
+            max-width: 500px;
+            margin: 30px auto 0;
+            padding: 20px 30px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .heart-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .heart-message p {
+            font-style: italic;
+            color: #e6e4f0;
+            line-height: 1.6;
+        }
+
+        /* --- 8. Floating Music Player --- */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .music-toggle-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(255, 77, 109, 0.1);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--white);
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+            box-shadow: 0 8px 32px rgba(255, 77, 109, 0.15);
+        }
+
+        .music-toggle-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255, 77, 109, 0.25);
+        }
+
+        .music-wave {
+            display: none;
+            position: absolute;
+            bottom: 12px;
+            width: 20px;
+            justify-content: space-between;
+            height: 10px;
+        }
+
+        .music-wave.playing {
+            display: flex;
+        }
+
+        .music-toggle-btn i {
+            transition: opacity 0.3s;
+        }
+
+        .music-wave.playing ~ i {
+            opacity: 0;
+        }
+
+        .music-wave span {
+            width: 3px;
+            height: 100%;
+            background-color: var(--pink-glow);
+            border-radius: 2px;
+            animation: wave-bar 1s ease-in-out infinite alternate;
+        }
+
+        .music-wave span:nth-child(2) { animation-delay: 0.2s; }
+        .music-wave span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes wave-bar {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1.3); }
+        }
+
+        /* --- 9. Forgive Me Section --- */
+        .forgive-section {
+            background: #080315;
+        }
+
+        .decision-card {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .decision-title {
+            font-family: var(--font-heading);
+            font-size: 2.1rem;
+            margin-bottom: 12px;
+        }
+
+        .decision-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            height: 60px;
+        }
+
+        .premium-btn {
+            padding: 14px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, var(--pink-glow), #d81159);
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.6);
+        }
+
+        .btn-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: all 0.5s ease;
+        }
+
+        .yes-btn:hover .btn-shine {
+            left: 100%;
+        }
+
+        .no-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            border: 1px solid var(--border-glass);
+            position: absolute;
+        }
+
+        /* Success Card Inside Decision Div */
+        .success-container {
+            text-align: center;
+            padding: 20px 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .success-container.hide {
+            display: none;
+            opacity: 0;
+        }
+
+        .success-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--pink-glow);
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- 10. Final Ending Section --- */
+        .ending-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #04010a;
+        }
+
+        .moon-bg {
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #ffeedd 10%, rgba(255, 238, 221, 0.2) 60%, transparent 100%);
+            border-radius: 50%;
+            filter: blur(8px) drop-shadow(0 0 40px rgba(255, 238, 221, 0.5));
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .ending-container {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .ending-tagline {
+            font-family: var(--font-accent);
+            font-size: 3rem;
+            color: var(--pink-glow);
+            margin-bottom: 15px;
+        }
+
+        .ending-main-text {
+            font-family: var(--font-heading);
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #ffffff, #ffe3ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+        }
+
+        .final-heart {
+            display: inline-block;
+            width: 65px;
+            height: 65px;
+            animation: pulse-zoom 1s infinite alternate;
+        }
+
+        .big-heart-svg {
+            fill: var(--pink-glow);
+            filter: drop-shadow(0 0 20px var(--pink-glow));
+        }
+
+        /* --- Screen Adjustments (Mobile Responsive) --- */
+        @media (max-width: 991px) {
+            .gallery-grid, .reasons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid, .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline-line {
+                left: 20px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 50px !important;
+                padding-right: 0 !important;
+            }
+            .timeline-item.left {
+                left: 0;
+            }
+            .timeline-item.right {
+                left: 0;
+            }
+            .timeline-glow {
+                left: 13px !important;
+            }
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .letter-card {
+                padding: 30px 20px;
+            }
+            .letter-body {
+                font-size: 1.1rem;
+            }
+            .ending-main-text {
+                font-size: 2.2rem;
+            }
+            .ending-tagline {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mouse Glow Effect -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- 1. Loading Screen -->
+    <div id="loader" class="loader-container">
+        <div class="loader-content">
+            <div class="heart-pulse">
+                <svg viewBox="0 0 32 29.6" class="heart-svg">
+                    <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                    c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                </svg>
+            </div>
+            <p class="loader-text">Preparing something special...</p>
+        </div>
+    </div>
+
+    <!-- 8. Floating Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <audio id="bgMusic" loop src="music.mp3"></audio>
+        <button class="music-toggle-btn" id="musicBtn" aria-label="Toggle Music">
+            <i class="fas fa-music"></i>
+            <div class="music-wave" id="musicWave">
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- 2. Hero Section -->
+            <section id="hero" class="hero-section">
+                <div id="particles-js"></div>
+                <div class="hero-container">
+                    <!-- Teddy Bear SVG -->
+                    <div class="teddy-wrapper" data-aos="zoom-in" data-aos-duration="1500">
+                        <svg class="teddy-svg" viewBox="0 0 200 200" width="180" height="180">
+                            <!-- Ears -->
+                            <circle cx="65" cy="65" r="20" fill="#a0785a" />
+                            <circle cx="65" cy="65" r="12" fill="#fbc3bc" />
+                            <circle cx="135" cy="65" r="20" fill="#a0785a" />
+                            <circle cx="135" cy="65" r="12" fill="#fbc3bc" />
+                            <!-- Head -->
+                            <circle cx="100" cy="95" r="45" fill="#b08362" />
+                            <!-- Muzzle -->
+                            <ellipse cx="100" cy="105" rx="18" ry="12" fill="#ebd2be" />
+                            <polygon points="95,101 105,101 100,107" fill="#4a2c11" />
+                            <path d="M100,107 Q100,113 96,113 M100,107 Q100,113 104,113" stroke="#4a2c11" stroke-width="2" fill="none" />
+                            <!-- Eyes -->
+                            <circle cx="85" cy="90" r="5" fill="#111" />
+                            <circle cx="85" cy="89" r="1.5" fill="#fff" />
+                            <circle cx="115" cy="90" r="5" fill="#111" />
+                            <circle cx="115" cy="89" r="1.5" fill="#fff" />
+                            <!-- Cheeks -->
+                            <circle cx="78" cy="100" r="6" fill="#fbc3bc" opacity="0.6" />
+                            <circle cx="122" cy="100" r="6" fill="#fbc3bc" opacity="0.6" />
+                            <!-- Signboard holding "I'm Sorry" -->
+                            <g class="signboard">
+                                <rect x="55" y="125" width="90" height="40" rx="8" fill="#ff4d6d" filter="drop-shadow(0px 4px 6px rgba(0,0,0,0.2))" />
+                                <text x="100" y="149" font-family="'Inter', sans-serif" font-weight="bold" font-size="12" fill="#ffffff" text-anchor="middle">I'M SORRY ❤️</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <h1 class="hero-title">
+                        <span id="typewriter-hero"></span>
+                    </h1>
+                    <p class="hero-subtitle">Scroll down to read my heart...</p>
+                    <div class="scroll-down-indicator">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Love Letter -->
+            <section id="letter" class="letter-section">
+                <div class="section-container">
+                    <div class="glass-card letter-card" data-aos="fade-up">
+                        <div class="glowing-border"></div>
+                        <h2 class="letter-title">My Dearest Bumblebee,</h2>
+                        <div class="letter-body">
+                            <span id="typewriter-letter"></span>
+                        </div>
+                        <div class="letter-signature">- Yours Always, Betu</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Memory Gallery -->
+            <section id="gallery" class="gallery-section">
+                <div class="section-container">
+                    <h2 class="section-title" data-aos="fade-up">Our Golden Moments</h2>
+                    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Click on any moment to look closer</p>
+                    
+                    <div class="gallery-grid">
+                        <!-- Card 1 -->
+                        <div class="gallery-card-wrapper" data-aos="fade-up" data-aos-delay="100">
+                            <div class="gallery-card" onclick="openLightbox('images/photo1.jpg', 'Our beautiful adventures together in nature.')">
+                                <div class="image-container">
+                                    <img src="images/photo1.jpg" alt="Our adventure">
+                                    <div class="reflection"></div>
+                                </div>
+                                <div class="card-caption">Where hearts connect</div>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="gallery-card-wrapper" data-aos="fade-up" data-aos-delay="200">
+                            <div class="gallery-card" onclick="openLightbox('images/photo2.jpg', 'Simple dates, endless laughters, and beautiful smiles.')">
+                                <div class="image-container">
+                                    <img src="images/photo2.jpg" alt="Quiet date night">
+                                    <div class="reflection"></div>
+                                </div>
+                                <div class="card-caption">Everyday magic with you</div>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="gallery-card-wrapper" data-aos="fade-up" data-aos-delay="300">
+                            <div class="gallery-card" onclick="openLightbox('images/photo3.jpg', 'Celebrating life and traditional grace hand-in-hand.')">
+                                <div class="image-container">
+                                    <img src="images/photo3.jpg" alt="Traditional elegance">
+                                    <div class="reflection"></div>
+                                </div>
+                                <div class="card-caption">My forever favorite view</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lightbox Modal -->
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <span class="lightbox-close">&times;</span>
+                <div class="lightbox-content" onclick="event.stopPropagation()">
+                    <img id="lightbox-img" src="" alt="Enlarged view">
+                    <p id="lightbox-caption" class="lightbox-caption"></p>
+                </div>
+            </div>
+
+            <!-- 5. Timeline -->
+            <section id="timeline" class="timeline-section">
+                <div class="section-container">
+                    <h2 class="section-title" data-aos="fade-up">Our Beautiful Journey</h2>
+                    <div class="timeline-container">
+                        <div class="timeline-line"></div>
+                        
+                        <!-- Timeline Point 1 -->
+                        <div class="timeline-item left" data-aos="fade-right">
+                            <div class="timeline-glow"></div>
+                            <div class="timeline-content glass-card">
+                                <span class="timeline-date">The Beginning</span>
+                                <h3>The Spark</h3>
+                                <p>The magical moment our paths crossed, and my world changed forever. One glance at my lovely Bumblebee, and I knew you were the one.</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Point 2 -->
+                        <div class="timeline-item right" data-aos="fade-left">
+                            <div class="timeline-glow"></div>
+                            <div class="timeline-content glass-card">
+                                <span class="timeline-date">The Growth</span>
+                                <h3>Building Memories</h3>
+                                <p>Sharing late-night conversations, understanding each other's silences, and realizing that Betu's real home is with you.</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Point 3 -->
+                        <div class="timeline-item left" data-aos="fade-right">
+                            <div class="timeline-glow"></div>
+                            <div class="timeline-content glass-card">
+                                <span class="timeline-date">The Present</span>
+                                <h3>Through Storms & Sunsets</h3>
+                                <p>Learning that love isn't just about perfect days, but about holding hands tightly when things get rough. Learning, growing, and healing together.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Reasons Why I Love You -->
+            <section id="reasons" class="reasons-section">
+                <div class="section-container">
+                    <h2 class="section-title" data-aos="fade-up">Why You Mean Everything to Betu</h2>
+                    <div class="reasons-grid">
+                        <div class="reason-card glass-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="reason-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <h3>Your Radiance</h3>
+                            <p>How you light up any space you walk into, and how effortlessly you make everyone around you smile.</p>
+                        </div>
+                        <div class="reason-card glass-card" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="reason-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                            <h3>Your Compassion</h3>
+                            <p>The deep warmth, understanding, and kindness you carry in your heart. You make your Betu want to be a better person every day.</p>
+                        </div>
+                        <div class="reason-card glass-card" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="reason-icon"><i class="fa-solid fa-infinity"></i></div>
+                            <h3>Our Safe Haven</h3>
+                            <p>No matter how chaotic life gets, being next to my Bumblebee is the only place where my mind truly finds peace.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Interactive Heart -->
+            <section id="interactive-heart" class="interactive-heart-section">
+                <div class="section-container">
+                    <h2 class="section-title" data-aos="fade-up">Touch My Heart</h2>
+                    <p class="section-subtitle" data-aos="fade-up">Give it a gentle press...</p>
+                    
+                    <div class="heart-container" data-aos="zoom-in">
+                        <div class="glowing-heart" id="touchHeart">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                    </div>
+                    
+                    <div id="heart-message" class="heart-message glass-card">
+                        <p id="dynamic-message">Every single heartbeat of mine beats solely for my Bumblebee.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Forgive Me Section -->
+            <section id="forgive-me" class="forgive-section">
+                <div class="section-container">
+                    <div class="glass-card decision-card" data-aos="flip-up">
+                        <h2 class="decision-title">Will Bumblebee forgive her Betu?</h2>
+                        <p class="decision-subtitle">I promise to protect your heart gently, always.</p>
+                        
+                        <div class="btn-group" id="btnGroup">
+                            <button id="yesBtn" class="premium-btn yes-btn">
+                                <span class="btn-text">❤️ Yes</span>
+                                <span class="btn-shine"></span>
+                            </button>
+                            <button id="noBtn" class="premium-btn no-btn">💔 No</button>
+                        </div>
+
+                        <!-- Success Screen -->
+                        <div id="successCard" class="success-container hide">
+                            <div class="success-icon">✨💍✨</div>
+                            <h3 class="success-title">Thank you for giving us another chance ❤️</h3>
+                            <p class="success-text">Betu will love his Bumblebee better, deeper, and more patiently with every passing day.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Final Ending -->
+            <section id="ending" class="ending-section">
+                <div class="moon-bg"></div>
+                <div class="stars-layer" id="ending-stars"></div>
+                
+                <div class="section-container ending-container">
+                    <div class="animated-closing" data-aos="fade-up">
+                        <p class="ending-tagline">No matter what happens,</p>
+                        <h2 class="ending-main-text">Betu will always choose Bumblebee.</h2>
+                    </div>
+
+                    <div class="final-heart" data-aos="zoom-in" data-aos-delay="300">
+                        <svg viewBox="0 0 32 29.6" class="big-heart-svg">
+                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                            c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Script Logic -->
+    <script>
+        // --- 1. Window Loaded & Initialization ---
+        window.addEventListener('load', () => {
+            // Hide Loader
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                initAfterLoad();
+            }, 1200);
+        });
+
+        function initAfterLoad() {
+            // Initialize Scroll Animations (AOS)
+            AOS.init({
+                duration: 1000,
+                easing: 'ease-out-cubic',
+                once: true,
+                mirror: false
+            });
+
+            // Start Particles background in Hero
+            initParticles();
+            
+            // Start Typewriter animations
+            startTypewriterAnimations();
+        }
+
+        // --- 2. Custom Mouse Glow Movement ---
+        const mouseGlow = document.getElementById('mouseGlow');
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+        });
+
+        // Interactive subtle pointer changes on hoverable parts
+        document.querySelectorAll('button, .gallery-card, .glowing-heart').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                mouseGlow.style.width = '380px';
+                mouseGlow.style.height = '380px';
+            });
+            element.addEventListener('mouseleave', () => {
+                mouseGlow.style.width = '300px';
+                mouseGlow.style.height = '300px';
+            });
+        });
+
+        // --- 3. Particles Background Setup ---
+        function initParticles() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": { "value": 75, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": ["#ff4d6d", "#a020f0", "#00d2ff"] },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": { "width": 0, "color": "#000000" }
+                    },
+                    "opacity": {
+                        "value": 0.4,
+                        "random": true,
+                        "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false }
+                    },
+                    "size": {
+                        "value": 3.5,
+                        "random": true,
+                        "anim": { "enable": false }
+                    },
+                    "line_linked": { "enable": false },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.2,
+                        "direction": "top",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": { "enable": true, "mode": "bubble" },
+                        "onclick": { "enable": false }
+                    },
+                    "modes": {
+                        "bubble": { "distance": 150, "size": 6, "duration": 2, "opacity": 0.8, "speed": 3 }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+
+        // --- 4. Typewriter Animations ---
+        function startTypewriterAnimations() {
+            // Hero Title Typewriter
+            new Typed('#typewriter-hero', {
+                strings: [
+                    "Every heartbeat still says your name...",
+                    "Every single thought belongs to my sweet Bumblebee...",
+                    "Betu is deeply sorry, my lovely Bumblebee."
+                ],
+                typeSpeed: 60,
+                backSpeed: 40,
+                backDelay: 2500,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|'
+            });
+
+            // Letter Card Typewriter
+            new Typed('#typewriter-letter', {
+                strings: [
+                    "My sweet Bumblebee,^1000<br><br>" +
+                    "Words often fail your Betu when I want to tell you how incredibly much you mean to me. I know I have made mistakes, said things without thinking, and caused hurt where I only ever wanted to give you endless happiness. ^600 For that, I am truly, deeply sorry.<br><br>" +
+                    "You are my peaceful harbor, my happiest smile, and the soul I cherish above everything else in this world. This page is a little reminder of our beautiful magic, created to ask for your grace. Please let me hold your hand again, through sunsets and simple moments alike.<br><br>" +
+                    "I love you so much."
+                ],
+                typeSpeed: 30,
+                loop: false,
+                showCursor: false
+            });
+        }
+
+        // --- 5. Lightbox Modal Gallery ---
+        function openLightbox(src, caption) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCap = document.getElementById('lightbox-caption');
+            
+            lightboxImg.src = src;
+            lightboxCap.textContent = caption;
+            lightbox.classList.add('show');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('show');
+        }
+
+        // Escape key dismisses gallery view
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeLightbox();
+        });
+
+        // --- 6. Music Control System ---
+        const musicBtn = document.getElementById('musicBtn');
+        const musicWave = document.getElementById('musicWave');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicWave.classList.remove('playing');
+                musicBtn.querySelector('i').style.opacity = '1';
+                isPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicWave.classList.add('playing');
+                    musicBtn.querySelector('i').style.opacity = '0';
+                    isPlaying = true;
+                }).catch(err => {
+                    console.log("Audio play deferred or blocked:", err);
+                });
+            }
+        });
+
+        // Play background music gracefully on first scroll interaction
+        const startMusicOnScroll = () => {
+            if (!isPlaying) {
+                bgMusic.play().then(() => {
+                    musicWave.classList.add('playing');
+                    musicBtn.querySelector('i').style.opacity = '0';
+                    isPlaying = true;
+                }).catch(() => {});
+            }
+            window.removeEventListener('scroll', startMusicOnScroll);
+        };
+        window.addEventListener('scroll', startMusicOnScroll);
+
+        // --- 7. Interactive Heart Clicker ---
+        const touchHeart = document.getElementById('touchHeart');
+        const heartMessage = document.getElementById('heart-message');
+        const dynamicMessage = document.getElementById('dynamic-message');
+
+        const messagesList = [
+            "Your happiness means the absolute universe to Betu.",
+            "Every day spent with Bumblebee is my lifetime favorite date.",
+            "No matter where life takes us, my hand will always reach for yours.",
+            "You are my favorite thoughts and my best reality.",
+            "Your smile is the light that guides your Betu through dark hours."
+        ];
+        let messageIndex = 0;
+
+        touchHeart.addEventListener('click', () => {
+            // Create random tiny floating hearts on click
+            createFloatingHearts(15);
+            
+            // Cycle Messages smoothly
+            heartMessage.classList.remove('show');
+            
+            setTimeout(() => {
+                dynamicMessage.textContent = messagesList[messageIndex];
+                messageIndex = (messageIndex + 1) % messagesList.length;
+                heartMessage.classList.add('show');
+            }, 400);
+        });
+
+        function createFloatingHearts(qty) {
+            for (let i = 0; i < qty; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.left = (touchHeart.getBoundingClientRect().left + window.scrollX + 45 + (Math.random() * 40 - 20)) + 'px';
+                heart.style.top = (touchHeart.getBoundingClientRect().top + window.scrollY + 10) + 'px';
+                heart.style.fontSize = (Math.random() * 14 + 12) + 'px';
+                heart.style.pointerEvents = 'none';
+                heart.style.opacity = '0.9';
+                heart.style.zIndex = '999';
+                document.body.appendChild(heart);
+
+                gsap.to(heart, {
+                    y: -150 - Math.random() * 100,
+                    x: (Math.random() * 120 - 60),
+                    opacity: 0,
+                    duration: 1.5 + Math.random() * 1.5,
+                    ease: "power1.out",
+                    onComplete: () => heart.remove()
+                });
+            }
+        }
+
+        // --- 8. Decision Logic: Running 'No' Button ---
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const btnGroup = document.getElementById('btnGroup');
+        const successCard = document.getElementById('successCard');
+
+        noBtn.addEventListener('mouseover', moveButtonRandomly);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButtonRandomly();
+        });
+
+        function moveButtonRandomly() {
+            const parent = btnGroup;
+            const padding = 20;
+            
+            const maxX = parent.clientWidth - noBtn.clientWidth - padding;
+            const maxY = parent.clientHeight - noBtn.clientHeight - padding;
+            
+            const newX = Math.random() * maxX - (maxX / 2);
+            const newY = Math.random() * maxY - (maxY / 2);
+            
+            gsap.to(noBtn, {
+                x: newX,
+                y: newY,
+                duration: 0.35,
+                ease: "power2.out"
+            });
+        }
+
+        // --- 9. Decision Logic: Yes Button Click Success ---
+        yesBtn.addEventListener('click', () => {
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+            btnGroup.style.display = 'none';
+            
+            successCard.classList.remove('hide');
+            
+            triggerConfettiExplosion();
+        });
+
+        function triggerConfettiExplosion() {
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 11000 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
